@@ -19,11 +19,12 @@ async function seed() {
     if (vault) {
         console.log(`Vault account already exists: ${vault._id}`)
     } else {
-        vault = await accountModel.create({
+        vault = new accountModel({
             status: "ACTIVE",
             accountType: "SAVINGS",
             currency: "INR"
         })
+        await vault.save({ validateBeforeSave: false })
         console.log(`Created new vault account: ${vault._id}`)
     }
 
