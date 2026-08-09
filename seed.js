@@ -33,11 +33,12 @@ async function seed() {
     if (existingLedgerEntry) {
         console.log("Vault already has ledger entries, skipping seed credit.")
     } else {
-        await ledgerModel.create({
+        const entry = new ledgerModel({
             account: vault._id,
             amount: VAULT_STARTING_BALANCE,
             type: "CREDIT"
         })
+        await entry.save({ validateBeforeSave: false })
         console.log(`Seeded vault with ₹${VAULT_STARTING_BALANCE}`)
     }
 
