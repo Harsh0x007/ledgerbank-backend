@@ -10,6 +10,12 @@ const transporter = nodemailer.createTransport({
         clientSecret: process.env.CLIENT_SECRET,
         refreshToken: process.env.REFRESH_TOKEN,
     },
+    // Render's network can fail to route outbound IPv6 to Gmail's SMTP
+    // servers (ENETUNREACH). Force IPv4 to avoid that.
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    family: 4,
 })
 
 // console.log(process.env.EMAIL_USER)

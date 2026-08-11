@@ -181,7 +181,7 @@ async function createInitialFundsTransaction(req, res) {
         })
     }
 
-    const VAULT_ACCOUNT_ID = "6a771f3b1eb2357ca50e0241"
+    const VAULT_ACCOUNT_ID = process.env.VAULT_ACCOUNT_ID || "6a771f3b1eb2357ca50e0241"
 
     const fromUserAccount = await accountModel.findOne({
         _id: VAULT_ACCOUNT_ID
@@ -287,7 +287,7 @@ async function addMoneyController(req, res) {
         })
     }
 
-    const VAULT_ACCOUNT_ID = "6a771f3b1eb2357ca50e0241"
+    const VAULT_ACCOUNT_ID = process.env.VAULT_ACCOUNT_ID || "6a771f3b1eb2357ca50e0241"
 
     const vaultAccount = await accountModel.findOne({ _id: VAULT_ACCOUNT_ID })
 

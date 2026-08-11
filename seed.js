@@ -44,7 +44,9 @@ async function seed() {
 
     console.log("\n=========================================")
     console.log(`VAULT_ACCOUNT_ID = "${vault._id}"`)
-    console.log("Copy this into transaction.controller.js")
+    console.log("Set this as the VAULT_ACCOUNT_ID env var")
+    console.log("(Render dashboard → Environment tab) so it")
+    console.log("can't drift out of sync with the controller.")
     console.log("=========================================\n")
 
     await mongoose.connection.close()
