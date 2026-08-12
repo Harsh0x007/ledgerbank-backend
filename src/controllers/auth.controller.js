@@ -37,8 +37,6 @@ async function userRegisterController(req, res) {
         res.cookie('token', token)
 
         // ✅ Send email BEFORE response
-        await emailService.sendRegisterationEmail(user.email, user.name)
-
         res.status(201).json({
             message: "User registered successfully",
             user: {
@@ -49,6 +47,10 @@ async function userRegisterController(req, res) {
             token
         })
 
+        // Fire-and-forget: don't block the response on email delivery.
+        // sendRegisterationEmail already catches its own errors internally.
+        emailService.sendRegisterationEmail(user.email, user.name)
+        
     } catch (error) {
         console.error("Registration Error:", error)
         res.status(500).json({
@@ -63,16 +65,16 @@ async function userRegisterController(req, res) {
  */
 
 async function userLoginController(req, res) {
-    
+
     const { email, password } = req.body
 
-    if( !email || !password) {
+    if (!email || !password) {
         return res.status(400).json({
             message: "Email and Password are required"
         })
     }
 
-    const user = await userModel.findOne({ email}).select('+password')
+    const user = await userModel.findOne({ email }).select('+password')
 
     if (!user) {
         return res.status(401).json({
@@ -82,7 +84,7 @@ async function userLoginController(req, res) {
 
     const isvalidPassword = await user.comparePassword(password)
 
-    if(!isvalidPassword) {
+    if (!isvalidPassword) {
         return res.status(401).json({
             message: "Password is Invalid"
         })
@@ -91,7 +93,7 @@ async function userLoginController(req, res) {
     const token = jwt.sign(
         { userId: user._id },
         process.env.JWT_SECRET,
-        { expiresIn: '2d'}
+        { expiresIn: '2d' }
     )
 
     res.cookie('token', token)
@@ -115,8 +117,8 @@ async function userLogoutController(req, res) {
         })
     }
 
-    
-    
+
+
     await tokenBlackListModel.create({
         token: token
     })
@@ -127,7 +129,7 @@ async function userLogoutController(req, res) {
     })
 }
 
-module.exports = { 
+module.exports = {
     userRegisterController,
     userLoginController,
     userLogoutController

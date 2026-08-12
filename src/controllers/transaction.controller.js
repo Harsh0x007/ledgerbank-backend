@@ -151,10 +151,10 @@ const fromUserAccount = await accountModel.findOne({
     }
 
     /**
-     * 10. Send email notification
+     * 10. Send email notification (fire-and-forget — don't block the
+     * response on SMTP; sendTransactionEmail catches its own errors)
      */
-
-    await emailService.sendTransactionEmail(req.user.email, req.user.name, amount, toAccount)
+    emailService.sendTransactionEmail(req.user.email, req.user.name, amount, toAccount)
 
     return res.status(201).json({
         message: "Transaction completed successfully",
